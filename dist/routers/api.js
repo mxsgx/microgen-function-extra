@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
-var users_1 = __importDefault(require("src/controllers/v1/users"));
-var auth_1 = __importDefault(require("src/middlewares/auth"));
+var users_1 = __importDefault(require("../controllers/v1/users"));
+var auth_1 = __importDefault(require("../middlewares/auth"));
 var APIRouter = (0, express_1.Router)();
 var V1 = (0, express_1.Router)();
 APIRouter.use('/v1', V1);
