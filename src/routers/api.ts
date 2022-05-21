@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import UsersController from 'src/controllers/v1/users';
-import auth from 'src/middlewares/auth';
+
+import UsersController from '../controllers/v1/users';
+import auth from '../middlewares/auth';
 
 const APIRouter = Router();
 
