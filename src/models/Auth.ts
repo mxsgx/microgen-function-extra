@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import mongoose, { Document, Types } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -7,7 +7,7 @@ export type AuthDocument = Auth & Document;
 
 export const AuthSchema = new Schema<AuthDocument>({
   user: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
   },
   token: {
