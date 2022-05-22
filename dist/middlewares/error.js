@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var joi_1 = __importDefault(require("joi"));
 var HttpError_1 = __importDefault(require("../errors/HttpError"));
 exports.default = (function (err, req, res, next) {
+    console.error("[Server] ".concat(req.method, " ").concat(req.originalUrl, ":"), err);
     if (joi_1.default.isError(err)) {
         var data_1 = {};
         err.details.forEach(function (_a) {
