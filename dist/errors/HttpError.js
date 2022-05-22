@@ -21,6 +21,7 @@ var HttpError = /** @class */ (function (_super) {
         var _this = _super.call(this, message) || this;
         _this.name = 'HttpError';
         _this.statusCode = 400;
+        _this.isHttpError = true;
         return _this;
     }
     return HttpError;

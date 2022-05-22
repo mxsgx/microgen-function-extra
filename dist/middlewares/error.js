@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var joi_1 = __importDefault(require("joi"));
-var HttpError_1 = __importDefault(require("../errors/HttpError"));
 exports.default = (function (err, req, res, next) {
     console.error("[Server] ".concat(req.method, " ").concat(req.originalUrl, ":"), err);
     if (joi_1.default.isError(err)) {
@@ -19,7 +18,7 @@ exports.default = (function (err, req, res, next) {
             data: data_1,
         });
     }
-    if (err instanceof HttpError_1.default) {
+    if (err.isHttpError) {
         return res.status(err.statusCode).json({
             status: 'error',
             message: err.message,
