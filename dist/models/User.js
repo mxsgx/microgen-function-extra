@@ -8,9 +8,15 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var Schema = mongoose_1.default.Schema;
 exports.UserSchema = new Schema({
     firstName: String,
-    lastName: String,
+    lastName: {
+        type: String,
+        default: '',
+    },
     email: String,
-    password: String,
+    password: {
+        type: String,
+        select: false,
+    },
 });
 var User = mongoose_1.default.model('User', exports.UserSchema);
 exports.default = User;
