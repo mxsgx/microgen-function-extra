@@ -49,11 +49,11 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
                 _a.trys.push([0, 2, , 3]);
                 authorization = req.get('authorization');
                 if (!authorization) {
-                    throw new UnauthorizedError_1.default();
+                    throw new UnauthorizedError_1.default('Unauthenticated');
                 }
                 token = authorization.split(' ')[1];
                 if (!token) {
-                    throw new UnauthorizedError_1.default();
+                    throw new UnauthorizedError_1.default('Unauthenticated');
                 }
                 return [4 /*yield*/, Auth_1.default.findOne({ token: token })
                         .populate('user')
@@ -61,10 +61,10 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
             case 1:
                 auth = _a.sent();
                 if (!auth) {
-                    throw new UnauthorizedError_1.default();
+                    throw new UnauthorizedError_1.default('Invalid token');
                 }
                 if (Date.now() >= auth.expiresIn) {
-                    throw new UnauthorizedError_1.default();
+                    throw new UnauthorizedError_1.default('Token is expired');
                 }
                 req.auth = {
                     token: token,
