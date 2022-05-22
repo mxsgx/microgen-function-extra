@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
-import UnprocessableEntityError from '../../errors/UnprocessableEntityError';
+
 import Auth from '../../models/Auth';
-import User, { UserDocument } from '../../models/User';
+import User from '../../models/User';
 
 interface RegisterRequest {
   firstName: string;
