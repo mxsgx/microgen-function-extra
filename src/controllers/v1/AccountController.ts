@@ -19,24 +19,27 @@ export default class AccountController {
       const validator = Joi.object<RegisterRequest>({
         firstName: Joi.string().required().trim(),
         lastName: Joi.string().optional().trim(),
-        email: Joi.string()
-          .email()
-          .required()
-          .trim()
-          .external(async (value) => {
-            if (await User.findOne({ email: value }).exec()) {
-              throw new Error('"email" already taken.');
-            }
-          }),
+        email: Joi.string().email().required().trim(),
         password: Joi.string().min(8).required(),
         passwordConfirmation: Joi.ref('password'),
       }).with('password', 'passwordConfirmation');
 
-      const body: RegisterRequest = await validator.validateAsync(req.body, {
-        errors: {
-          label: false,
-        },
-      });
+      const body: RegisterRequest = await validator.validateAsync(req.body);
+
+      Joi.object({
+        email: Joi.any().external(async (value) => {
+          if (await User.findOne({ email: value }).exec()) {
+            throw new Error('"email" already taken.');
+          }
+        }),
+      }).validateAsync(
+        { email: body.email },
+        {
+          errors: {
+            label: false,
+          },
+        }
+      );
 
       const user = await User.create({
         firstName: body.firstName,
