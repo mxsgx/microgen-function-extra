@@ -34,6 +34,7 @@ jobs:
           path: build
 
       - run: |
+          rm -rf ./build/dist
           rsync -av --recursive --delete ./main/dist ./build
           cp -f ./main/package.json ./build/package.json
           cp -f ./main/package-lock.json ./build/package-lock.json
