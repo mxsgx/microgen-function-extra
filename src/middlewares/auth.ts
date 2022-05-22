@@ -8,13 +8,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.get('authorization');
 
     if (!authorization) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError('Unauthenticated');
     }
 
     const token = authorization.split(' ')[1];
 
     if (!token) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError('Unauthenticated');
     }
 
     const auth: AuthDocument = await Auth.findOne({ token })
@@ -22,11 +22,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       .exec();
 
     if (!auth) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError('Invalid token');
     }
 
     if (Date.now() >= auth.expiresIn) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError('Token is expired');
     }
 
     req.auth = {
