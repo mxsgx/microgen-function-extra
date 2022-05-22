@@ -50,7 +50,7 @@ var AuthController = /** @class */ (function () {
     }
     AuthController.login = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var validator, body, user, auth, response, e_1;
+            var validator, body, user, auth, userObj, response, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -81,11 +81,13 @@ var AuthController = /** @class */ (function () {
                             })];
                     case 3:
                         auth = _a.sent();
+                        userObj = user.toObject();
+                        delete userObj.password;
                         response = {
                             status: 'success',
                             data: {
                                 token: auth.token,
-                                user: user.toObject(),
+                                user: userObj,
                             },
                         };
                         return [2 /*return*/, res.status(201).json(response)];

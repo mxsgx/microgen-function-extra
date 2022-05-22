@@ -48,7 +48,7 @@ var AccountController = /** @class */ (function () {
     }
     AccountController.register = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var validator, body, user, _a, _b, auth, e_1;
+            var validator, body, user, _a, _b, auth, userObj, e_1;
             var _c;
             var _this = this;
             return __generator(this, function (_d) {
@@ -100,11 +100,13 @@ var AccountController = /** @class */ (function () {
                             })];
                     case 4:
                         auth = _d.sent();
+                        userObj = user.toObject();
+                        delete userObj.password;
                         return [2 /*return*/, res.status(200).json({
                                 status: 'success',
                                 data: {
                                     token: auth.token,
-                                    user: user.toObject(),
+                                    user: userObj,
                                 },
                             })];
                     case 5:
