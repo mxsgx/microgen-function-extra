@@ -58,11 +58,15 @@ var AccountController = /** @class */ (function () {
                         validator = joi_1.default.object({
                             firstName: joi_1.default.string().required().trim(),
                             lastName: joi_1.default.string().optional().trim(),
-                            email: joi_1.default.string()
-                                .email()
-                                .required()
-                                .trim()
-                                .external(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                            email: joi_1.default.string().email().required().trim(),
+                            password: joi_1.default.string().min(8).required(),
+                            passwordConfirmation: joi_1.default.ref('password'),
+                        }).with('password', 'passwordConfirmation');
+                        return [4 /*yield*/, validator.validateAsync(req.body)];
+                    case 1:
+                        body = _d.sent();
+                        joi_1.default.object({
+                            email: joi_1.default.any().external(function (value) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
@@ -74,16 +78,11 @@ var AccountController = /** @class */ (function () {
                                     }
                                 });
                             }); }),
-                            password: joi_1.default.string().min(8).required(),
-                            passwordConfirmation: joi_1.default.ref('password'),
-                        }).with('password', 'passwordConfirmation');
-                        return [4 /*yield*/, validator.validateAsync(req.body, {
-                                errors: {
-                                    label: false,
-                                },
-                            })];
-                    case 1:
-                        body = _d.sent();
+                        }).validateAsync({ email: body.email }, {
+                            errors: {
+                                label: false,
+                            },
+                        });
                         _b = (_a = User_1.default).create;
                         _c = {
                             firstName: body.firstName,
