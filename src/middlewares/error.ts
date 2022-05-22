@@ -9,6 +9,8 @@ export default (
   res: Response,
   next: NextFunction
 ) => {
+  console.error(`[Server] ${req.method} ${req.originalUrl}:`, err);
+
   if (Joi.isError(err)) {
     const data: { [index: string]: string } = {};
 
