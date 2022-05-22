@@ -26,8 +26,8 @@ export default (
     });
   }
 
-  if (err instanceof HttpError) {
-    return res.status(err.statusCode).json({
+  if ((err as HttpError).isHttpError) {
+    return res.status((err as HttpError).statusCode).json({
       status: 'error',
       message: err.message,
     });
