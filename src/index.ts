@@ -26,6 +26,9 @@ module.exports = (app: Application) => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
+    .then(() => {
+      console.info('[Database] Connected to MongoDB server.');
+    })
     .catch((err) => {
       console.error('[Database] Cannot connect to MongoDB server.');
       console.error('[Database]', err || err.message);
