@@ -43,11 +43,15 @@ export default class AuthController {
         expiresIn: Date.now() + 518_400_000, // 1 year
       });
 
+      const userObj = user.toObject();
+
+      delete userObj.password;
+
       const response: LoginResponse = {
         status: 'success',
         data: {
           token: auth.token,
-          user: user.toObject(),
+          user: userObj,
         },
       };
 

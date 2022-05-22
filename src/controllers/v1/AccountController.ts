@@ -53,11 +53,15 @@ export default class AccountController {
         expiresIn: Date.now() + 518_400_000,
       });
 
+      const userObj = user.toObject();
+
+      delete userObj.password;
+
       return res.status(200).json({
         status: 'success',
         data: {
           token: auth.token,
-          user: user.toObject(),
+          user: userObj,
         },
       });
     } catch (e) {
