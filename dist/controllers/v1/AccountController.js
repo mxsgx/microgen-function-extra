@@ -67,7 +67,6 @@ var buffer_1 = require("buffer");
 var crypto_1 = __importDefault(require("crypto"));
 var joi_1 = __importDefault(require("joi"));
 var jose = __importStar(require("jose"));
-var errors_1 = require("jose/dist/types/util/errors");
 var UnprocessableEntityError_1 = __importDefault(require("../../errors/UnprocessableEntityError"));
 var Auth_1 = __importDefault(require("../../models/Auth"));
 var PasswordReset_1 = __importDefault(require("../../models/PasswordReset"));
@@ -280,7 +279,7 @@ var AccountController = /** @class */ (function () {
                             })];
                     case 7:
                         e_3 = _e.sent();
-                        if (e_3 instanceof errors_1.JWTExpired) {
+                        if (e_3 instanceof jose.errors.JWTExpired) {
                             return [2 /*return*/, next(new UnprocessableEntityError_1.default('Token is invalid'))];
                         }
                         return [2 /*return*/, next(e_3)];
