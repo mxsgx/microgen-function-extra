@@ -29,6 +29,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       throw new UnauthorizedError('Token is expired');
     }
 
+    delete (auth.user as User).password;
+
     req.auth = {
       token,
       user: auth.user as User,
