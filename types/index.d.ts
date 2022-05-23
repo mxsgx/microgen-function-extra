@@ -1,4 +1,5 @@
 interface User {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -6,9 +7,17 @@ interface User {
 }
 
 interface Auth {
+  _id: string;
   user: User | string;
   token: string;
   expiresIn: number;
+}
+
+interface PasswordReset {
+  _id: string;
+  user: User | string;
+  token: string;
+  hash: string;
 }
 
 interface HttpResponse {
@@ -70,5 +79,11 @@ declare namespace Express {
       token: string;
       user: User;
     };
+  }
+}
+
+declare namespace NodeJS {
+  export interface ProcessEnv {
+    [key: string]: string;
   }
 }

@@ -5,6 +5,7 @@ const mongoUrlParser = require('mongo-url-parser');
 
 import APIRouter from './routers/api';
 import { mongoUrlBuilder } from './utils/helper';
+import { transporter } from './utils/mailer';
 
 module.exports = (app: Application) => {
   const parsedMongoUrl = mongoUrlParser(process.env.MAIN_SERVICE_MONGODB);
@@ -33,6 +34,16 @@ module.exports = (app: Application) => {
       console.error('[Database] Cannot connect to MongoDB server.');
       console.error('[Database]', err || err.message);
     });
+
+  transporter.verify((error, success) => {
+    if (error) {
+      return console.error('[Mailer] Server is not ready.');
+    }
+
+    console.info('[Mailer] Server is ready to take our messages.');
+  });
+
+  console.info(`[Info] Running server in ${app.env.ENVIRONMENT} environment`);
 
   app.use('/api', APIRouter);
 };
