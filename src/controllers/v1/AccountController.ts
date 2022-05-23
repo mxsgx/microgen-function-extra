@@ -4,7 +4,6 @@ import crypto from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
 import * as jose from 'jose';
-import { JWTExpired } from 'jose/dist/types/util/errors';
 import UnprocessableEntityError from '../../errors/UnprocessableEntityError';
 
 import Auth from '../../models/Auth';
@@ -207,7 +206,7 @@ export default class AccountController {
           },
         });
       } catch (e) {
-        if (e instanceof JWTExpired) {
+        if (e instanceof jose.errors.JWTExpired) {
           return next(new UnprocessableEntityError('Token is invalid'));
         }
 
