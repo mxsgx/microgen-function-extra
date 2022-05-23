@@ -101,7 +101,7 @@ var AccountController = /** @class */ (function () {
                                         case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
                                         case 1:
                                             if (_a.sent()) {
-                                                throw new Error('"email" already taken.');
+                                                return [2 /*return*/, new Error('"email" already taken.')];
                                             }
                                             return [2 /*return*/];
                                     }
