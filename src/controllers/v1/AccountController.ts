@@ -44,7 +44,7 @@ export default class AccountController {
 
       const body: RegisterRequest = await validator.validateAsync(req.body);
 
-      Joi.object({
+      await Joi.object({
         email: Joi.any().external(async (value) => {
           if (await User.findOne({ email: value }).exec()) {
             throw new Error('"email" already taken.');
