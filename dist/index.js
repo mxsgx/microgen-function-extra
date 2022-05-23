@@ -7,6 +7,7 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var mongoUrlParser = require('mongo-url-parser');
 var api_1 = __importDefault(require("./routers/api"));
 var helper_1 = require("./utils/helper");
+var mailer_1 = require("./utils/mailer");
 module.exports = function (app) {
     var parsedMongoUrl = mongoUrlParser(process.env.MAIN_SERVICE_MONGODB);
     var mongoUrl = (0, helper_1.mongoUrlBuilder)({
@@ -32,5 +33,12 @@ module.exports = function (app) {
         console.error('[Database] Cannot connect to MongoDB server.');
         console.error('[Database]', err || err.message);
     });
+    mailer_1.transporter.verify(function (error, success) {
+        if (error) {
+            return console.error('[Mailer] Server is not ready.');
+        }
+        console.info('[Mailer] Server is ready to take our messages.');
+    });
+    console.info("[Info] Running server in ".concat(app.env.ENVIRONMENT, " environment"));
     app.use('/api', api_1.default);
 };

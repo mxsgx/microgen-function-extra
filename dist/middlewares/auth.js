@@ -66,6 +66,7 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
                 if (Date.now() >= auth.expiresIn) {
                     throw new UnauthorizedError_1.default('Token is expired');
                 }
+                delete auth.user.password;
                 req.auth = {
                     token: token,
                     user: auth.user,
