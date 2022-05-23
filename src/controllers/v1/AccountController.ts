@@ -47,7 +47,7 @@ export default class AccountController {
       Joi.object({
         email: Joi.any().external(async (value) => {
           if (await User.findOne({ email: value }).exec()) {
-            return new Error('"email" already taken.');
+            throw new Error('"email" already taken.');
           }
         }),
       }).validateAsync(
