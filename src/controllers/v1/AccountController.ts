@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
 import crypto from 'crypto';
 import { NextFunction, Request, Response } from 'express';
-import Joi from 'joi';
+import Joi, { ValidationError } from 'joi';
 import * as jose from 'jose';
 import UnprocessableEntityError from '../../errors/UnprocessableEntityError';
 
@@ -47,7 +47,17 @@ export default class AccountController {
       await Joi.object({
         email: Joi.any().external(async (value) => {
           if (await User.findOne({ email: value }).exec()) {
-            throw new Error('"email" already taken.');
+            throw new ValidationError(
+              '"email" already taken',
+              [
+                {
+                  message: '"email" already taken',
+                  path: ['email'],
+                  context: { label: 'email', key: 'email' },
+                },
+              ],
+              { email: value }
+            );
           }
         }),
       }).validateAsync(
@@ -100,7 +110,17 @@ export default class AccountController {
       await Joi.object({
         email: Joi.any().external(async (value) => {
           if (!(await User.findOne({ email: value }).exec())) {
-            throw new Error("We couldn't find account with this email.");
+            throw new ValidationError(
+              "We couldn't find account with this email",
+              [
+                {
+                  message: "We couldn't find account with this email",
+                  path: ['email'],
+                  context: { label: 'email', key: 'email' },
+                },
+              ],
+              { email: value }
+            );
           }
         }),
       }).validateAsync(
