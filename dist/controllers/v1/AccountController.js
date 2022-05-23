@@ -65,7 +65,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var buffer_1 = require("buffer");
 var crypto_1 = __importDefault(require("crypto"));
-var joi_1 = __importDefault(require("joi"));
+var joi_1 = __importStar(require("joi"));
 var jose = __importStar(require("jose"));
 var UnprocessableEntityError_1 = __importDefault(require("../../errors/UnprocessableEntityError"));
 var Auth_1 = __importDefault(require("../../models/Auth"));
@@ -101,7 +101,13 @@ var AccountController = /** @class */ (function () {
                                             case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
                                             case 1:
                                                 if (_a.sent()) {
-                                                    throw new Error('"email" already taken.');
+                                                    throw new joi_1.ValidationError('"email" already taken', [
+                                                        {
+                                                            message: '"email" already taken',
+                                                            path: ['email'],
+                                                            context: { label: 'email', key: 'email' },
+                                                        },
+                                                    ], { email: value });
                                                 }
                                                 return [2 /*return*/];
                                         }
@@ -155,40 +161,48 @@ var AccountController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 6, , 7]);
+                        _a.trys.push([0, 7, , 8]);
                         validator = joi_1.default.object({
                             email: joi_1.default.string().email().required().trim(),
                         });
                         return [4 /*yield*/, validator.validateAsync(req.body)];
                     case 1:
                         body = _a.sent();
-                        joi_1.default.object({
-                            email: joi_1.default.any().external(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
-                                        case 1:
-                                            if (!(_a.sent())) {
-                                                throw new Error("We couldn't find account with this email.");
-                                            }
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
-                        }).validateAsync({ email: body.email }, {
-                            errors: {
-                                label: false,
-                            },
-                        });
+                        return [4 /*yield*/, joi_1.default.object({
+                                email: joi_1.default.any().external(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
+                                            case 1:
+                                                if (!(_a.sent())) {
+                                                    throw new joi_1.ValidationError("We couldn't find account with this email", [
+                                                        {
+                                                            message: "We couldn't find account with this email",
+                                                            path: ['email'],
+                                                            context: { label: 'email', key: 'email' },
+                                                        },
+                                                    ], { email: value });
+                                                }
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            }).validateAsync({ email: body.email }, {
+                                errors: {
+                                    label: false,
+                                },
+                            })];
+                    case 2:
+                        _a.sent();
                         return [4 /*yield*/, User_1.default.findOne({
                                 email: body.email,
                             }).exec()];
-                    case 2:
+                    case 3:
                         user_1 = _a.sent();
                         return [4 /*yield*/, PasswordReset_1.default.create({
                                 userId: user_1._id,
                             })];
-                    case 3:
+                    case 4:
                         passwordReset = _a.sent();
                         secretKey = crypto_1.default.createSecretKey(buffer_1.Buffer.from(process.env.JWT_SECRET, 'utf-8'));
                         return [4 /*yield*/, new jose.SignJWT({
@@ -197,13 +211,13 @@ var AccountController = /** @class */ (function () {
                                 .setProtectedHeader({ alg: 'HS256' })
                                 .setExpirationTime('1h')
                                 .sign(secretKey)];
-                    case 4:
+                    case 5:
                         jwt = _a.sent();
                         hash = crypto_1.default.createHash('sha256').update(jwt).digest('hex');
                         return [4 /*yield*/, passwordReset.update({
                                 hash: hash,
                             })];
-                    case 5:
+                    case 6:
                         _a.sent();
                         mailer_1.transporter
                             .sendMail({
@@ -221,10 +235,10 @@ var AccountController = /** @class */ (function () {
                                     message: 'Password reset link email is sent.',
                                 },
                             })];
-                    case 6:
+                    case 7:
                         e_2 = _a.sent();
                         return [2 /*return*/, next(e_2)];
-                    case 7: return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
