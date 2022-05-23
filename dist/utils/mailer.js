@@ -7,7 +7,7 @@ exports.transporter = void 0;
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var transporter = nodemailer_1.default.createTransport({
     host: process.env.SMTP_HOST,
-    port: +process.env.SMTP_HOST,
+    port: +process.env.SMTP_PORT,
     secure: false,
     auth: {
         user: process.env.SMTP_USER,
