@@ -83,7 +83,7 @@ var AccountController = /** @class */ (function () {
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        _d.trys.push([0, 5, , 6]);
+                        _d.trys.push([0, 6, , 7]);
                         validator = joi_1.default.object({
                             firstName: joi_1.default.string().required().trim(),
                             lastName: joi_1.default.string().optional().trim(),
@@ -94,24 +94,26 @@ var AccountController = /** @class */ (function () {
                         return [4 /*yield*/, validator.validateAsync(req.body)];
                     case 1:
                         body = _d.sent();
-                        joi_1.default.object({
-                            email: joi_1.default.any().external(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
-                                        case 1:
-                                            if (_a.sent()) {
-                                                return [2 /*return*/, new Error('"email" already taken.')];
-                                            }
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
-                        }).validateAsync({ email: body.email }, {
-                            errors: {
-                                label: false,
-                            },
-                        });
+                        return [4 /*yield*/, joi_1.default.object({
+                                email: joi_1.default.any().external(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, User_1.default.findOne({ email: value }).exec()];
+                                            case 1:
+                                                if (_a.sent()) {
+                                                    throw new Error('"email" already taken.');
+                                                }
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            }).validateAsync({ email: body.email }, {
+                                errors: {
+                                    label: false,
+                                },
+                            })];
+                    case 2:
+                        _d.sent();
                         _b = (_a = User_1.default).create;
                         _c = {
                             firstName: body.firstName,
@@ -119,15 +121,15 @@ var AccountController = /** @class */ (function () {
                             email: body.email
                         };
                         return [4 /*yield*/, bcrypt_1.default.hashSync(body.password, 10)];
-                    case 2: return [4 /*yield*/, _b.apply(_a, [(_c.password = _d.sent(),
+                    case 3: return [4 /*yield*/, _b.apply(_a, [(_c.password = _d.sent(),
                                 _c)])];
-                    case 3:
+                    case 4:
                         user = _d.sent();
                         return [4 /*yield*/, Auth_1.default.create({
                                 user: user._id,
                                 expiresIn: Date.now() + 518400000,
                             })];
-                    case 4:
+                    case 5:
                         auth = _d.sent();
                         userObj = user.toObject();
                         delete userObj.password;
@@ -138,10 +140,10 @@ var AccountController = /** @class */ (function () {
                                     user: userObj,
                                 },
                             })];
-                    case 5:
+                    case 6:
                         e_1 = _d.sent();
                         return [2 /*return*/, next(e_1)];
-                    case 6: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
