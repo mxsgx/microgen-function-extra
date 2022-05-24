@@ -200,7 +200,7 @@ var AccountController = /** @class */ (function () {
                     case 3:
                         user_1 = _a.sent();
                         return [4 /*yield*/, PasswordReset_1.default.create({
-                                userId: user_1._id,
+                                user: user_1._id,
                             })];
                     case 4:
                         passwordReset = _a.sent();
@@ -281,7 +281,7 @@ var AccountController = /** @class */ (function () {
                             throw new UnprocessableEntityError_1.default("Token hash doesn't match");
                         }
                         _b = (_a = User_1.default).updateOne;
-                        _c = [{ email: passwordReset.user.email }];
+                        _c = [{ _id: passwordReset.user._id }];
                         _d = {};
                         return [4 /*yield*/, bcrypt_1.default.hashSync(body.password, 10)];
                     case 5: return [4 /*yield*/, _b.apply(_a, _c.concat([(_d.password = _e.sent(), _d)]))];
