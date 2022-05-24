@@ -137,7 +137,7 @@ export default class AccountController {
       }).exec();
 
       const passwordReset = await PasswordReset.create({
-        userId: user._id,
+        user: user._id,
       });
 
       const secretKey = crypto.createSecretKey(
@@ -215,7 +215,7 @@ export default class AccountController {
         }
 
         await User.updateOne(
-          { email: (passwordReset.user as User).email },
+          { _id: (passwordReset.user as User)._id },
           { password: await bcrypt.hashSync(body.password, 10) }
         );
 
