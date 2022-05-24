@@ -46,3 +46,7 @@ jobs:
           git add .
           git commit -m "Update build files"
           git push
+
+      - run: |
+          cd main
+          MICROGEN_FUNCTION_DATA="${{ secrets.MICROGEN_FUNCTION_DATA }}" MICROGEN_ACCESS_TOKEN="${{ secrets.MICROGEN_ACCESS_TOKEN }}" MICROGEN_RERUN_DATA="${{ secrets.MICROGEN_RERUN_DATA }}" node ./.github/scripts/deploy.js
