@@ -40,5 +40,5 @@ module.exports = function (app) {
         console.info('[Mailer] Server is ready to take our messages.');
     });
     console.info("[Info] Running server in ".concat(app.env.ENVIRONMENT, " environment"));
-    app.use('/api', api_1.default);
+    app.use('/api/v1', api_1.default);
 };
