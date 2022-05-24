@@ -205,6 +205,10 @@ export default class AccountController {
             .populate('user')
             .exec();
 
+        if (!passwordReset) {
+          return next(new UnprocessableEntityError('Token is invalid'));
+        }
+
         const hash = crypto
           .createHash('sha256')
           .update(body.token)
@@ -218,6 +222,8 @@ export default class AccountController {
           { _id: (passwordReset.user as User)._id },
           { password: await bcrypt.hashSync(body.password, 10) }
         );
+
+        await passwordReset.deleteOne();
 
         return res.status(200).json({
           status: 'success',
