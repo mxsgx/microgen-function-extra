@@ -250,7 +250,7 @@ var AccountController = /** @class */ (function () {
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
-                        _e.trys.push([0, 9, , 10]);
+                        _e.trys.push([0, 10, , 11]);
                         validator = joi_1.default.object({
                             token: joi_1.default.string().required().trim(),
                             password: joi_1.default.string().required(),
@@ -262,7 +262,7 @@ var AccountController = /** @class */ (function () {
                         secretKey = crypto_1.default.createSecretKey(buffer_1.Buffer.from(process.env.JWT_SECRET, 'utf-8'));
                         _e.label = 2;
                     case 2:
-                        _e.trys.push([2, 7, , 8]);
+                        _e.trys.push([2, 8, , 9]);
                         return [4 /*yield*/, jose.jwtVerify(body.token, secretKey)];
                     case 3:
                         payload = (_e.sent()).payload;
@@ -273,6 +273,9 @@ var AccountController = /** @class */ (function () {
                                 .exec()];
                     case 4:
                         passwordReset = _e.sent();
+                        if (!passwordReset) {
+                            return [2 /*return*/, next(new UnprocessableEntityError_1.default('Token is invalid'))];
+                        }
                         hash = crypto_1.default
                             .createHash('sha256')
                             .update(body.token)
@@ -287,13 +290,16 @@ var AccountController = /** @class */ (function () {
                     case 5: return [4 /*yield*/, _b.apply(_a, _c.concat([(_d.password = _e.sent(), _d)]))];
                     case 6:
                         _e.sent();
+                        return [4 /*yield*/, passwordReset.deleteOne()];
+                    case 7:
+                        _e.sent();
                         return [2 /*return*/, res.status(200).json({
                                 status: 'success',
                                 data: {
                                     message: 'Password changed successfully.',
                                 },
                             })];
-                    case 7:
+                    case 8:
                         e_3 = _e.sent();
                         if (e_3 instanceof jose.errors.JWTExpired) {
                             return [2 /*return*/, next(new UnprocessableEntityError_1.default('Token is expired'))];
@@ -302,11 +308,11 @@ var AccountController = /** @class */ (function () {
                             return [2 /*return*/, next(new UnprocessableEntityError_1.default('Token is invalid'))];
                         }
                         return [2 /*return*/, next(e_3)];
-                    case 8: return [3 /*break*/, 10];
-                    case 9:
+                    case 9: return [3 /*break*/, 11];
+                    case 10:
                         e_4 = _e.sent();
                         return [2 /*return*/, next(e_4)];
-                    case 10: return [2 /*return*/];
+                    case 11: return [2 /*return*/];
                 }
             });
         });
