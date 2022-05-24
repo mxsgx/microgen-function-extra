@@ -227,6 +227,10 @@ export default class AccountController {
         });
       } catch (e) {
         if (e instanceof jose.errors.JWTExpired) {
+          return next(new UnprocessableEntityError('Token is expired'));
+        }
+
+        if (e instanceof jose.errors.JOSEError) {
           return next(new UnprocessableEntityError('Token is invalid'));
         }
 

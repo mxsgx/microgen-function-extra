@@ -17,6 +17,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       throw new UnauthorizedError('Unauthenticated');
     }
 
+    if (token.length != 32) {
+      throw new UnauthorizedError('Invalid token');
+    }
+
     const auth: AuthDocument = await Auth.findOne({ token })
       .populate('user')
       .exec();
