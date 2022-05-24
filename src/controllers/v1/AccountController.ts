@@ -153,7 +153,7 @@ export default class AccountController {
 
       const hash = crypto.createHash('sha256').update(jwt).digest('hex');
 
-      await passwordReset.update({
+      await passwordReset.updateOne({
         hash,
       });
 
