@@ -55,6 +55,9 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
                 if (!token) {
                     throw new UnauthorizedError_1.default('Unauthenticated');
                 }
+                if (token.length != 32) {
+                    throw new UnauthorizedError_1.default('Invalid token');
+                }
                 return [4 /*yield*/, Auth_1.default.findOne({ token: token })
                         .populate('user')
                         .exec()];

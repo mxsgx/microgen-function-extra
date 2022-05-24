@@ -214,7 +214,7 @@ var AccountController = /** @class */ (function () {
                     case 5:
                         jwt = _a.sent();
                         hash = crypto_1.default.createHash('sha256').update(jwt).digest('hex');
-                        return [4 /*yield*/, passwordReset.update({
+                        return [4 /*yield*/, passwordReset.updateOne({
                                 hash: hash,
                             })];
                     case 6:
@@ -281,7 +281,7 @@ var AccountController = /** @class */ (function () {
                             throw new UnprocessableEntityError_1.default("Token hash doesn't match");
                         }
                         _b = (_a = User_1.default).updateOne;
-                        _c = [{ _id: passwordReset.user._id }];
+                        _c = [{ email: passwordReset.user.email }];
                         _d = {};
                         return [4 /*yield*/, bcrypt_1.default.hashSync(body.password, 10)];
                     case 5: return [4 /*yield*/, _b.apply(_a, _c.concat([(_d.password = _e.sent(), _d)]))];
@@ -296,6 +296,9 @@ var AccountController = /** @class */ (function () {
                     case 7:
                         e_3 = _e.sent();
                         if (e_3 instanceof jose.errors.JWTExpired) {
+                            return [2 /*return*/, next(new UnprocessableEntityError_1.default('Token is expired'))];
+                        }
+                        if (e_3 instanceof jose.errors.JOSEError) {
                             return [2 /*return*/, next(new UnprocessableEntityError_1.default('Token is invalid'))];
                         }
                         return [2 /*return*/, next(e_3)];
