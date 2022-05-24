@@ -8,6 +8,10 @@ function sleep(ms) {
   try {
     const fetch = (await import('node-fetch')).default;
 
+    console.info('Wait for 5 seconds to make sure build files is updated...');
+
+    await sleep(5000);
+
     console.info('Updating MgFunction...');
 
     const response = await fetch('https://microgen.id/api/v2/function', {
@@ -25,10 +29,10 @@ function sleep(ms) {
 
     if (response.ok) {
       console.info(
-        'MgFunction updated! Wait for 5 seconds to make sure function is deployed...'
+        'MgFunction updated! Wait for 10 seconds to make sure function is deployed...'
       );
 
-      await sleep(5000);
+      await sleep(10000);
 
       console.info('Rerun project');
 
