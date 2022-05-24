@@ -45,5 +45,5 @@ module.exports = (app: Application) => {
 
   console.info(`[Info] Running server in ${app.env.ENVIRONMENT} environment`);
 
-  app.use('/api', APIRouter);
+  app.use('/api/v1', APIRouter);
 };
