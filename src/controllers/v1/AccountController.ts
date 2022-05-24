@@ -215,7 +215,7 @@ export default class AccountController {
         }
 
         await User.updateOne(
-          { _id: (passwordReset.user as User)._id },
+          { email: (passwordReset.user as User).email },
           { password: await bcrypt.hashSync(body.password, 10) }
         );
 
