@@ -228,7 +228,7 @@ var AccountController = /** @class */ (function () {
                             to: user_1.email,
                             subject: 'Reset Password'
                         };
-                        return [4 /*yield*/, ejs_1.default.renderFile(process.cwd() + '/src/resources/template/reset-password.ejs', { link: ejs_1.default.render(process.env.RESET_PASSWORD_URL, { token: jwt }) })];
+                        return [4 /*yield*/, ejs_1.default.renderFile(__dirname + '/../../../template/email/reset-password.ejs', { link: ejs_1.default.render(process.env.RESET_PASSWORD_URL, { token: jwt }) })];
                     case 7:
                         _b.apply(_a, [(_c.html = _d.sent(),
                                 _c)])
