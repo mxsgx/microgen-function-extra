@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 import Joi, { ValidationError } from 'joi';
 import * as jose from 'jose';
-import UnprocessableEntityError from '../../errors/UnprocessableEntityError';
+import ejs from 'ejs';
 
 import Auth from '../../models/Auth';
 import PasswordReset, {
@@ -12,6 +12,7 @@ import PasswordReset, {
 } from '../../models/PasswordReset';
 import User, { UserDocument } from '../../models/User';
 import { transporter } from '../../utils/mailer';
+import UnprocessableEntityError from '../../errors/UnprocessableEntityError';
 
 interface RegisterRequest {
   firstName: string;
@@ -162,7 +163,10 @@ export default class AccountController {
           from: 'masga@carakan.id',
           to: user.email,
           subject: 'Reset Password',
-          html: jwt,
+          html: await ejs.renderFile(
+            process.cwd() + '/src/resources/template/reset-password.ejs',
+            { link: ejs.render(process.env.RESET_PASSWORD_URL, { token: jwt }) }
+          ),
         })
         .catch((err) => {
           console.error(
