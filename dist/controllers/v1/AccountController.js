@@ -67,11 +67,12 @@ var buffer_1 = require("buffer");
 var crypto_1 = __importDefault(require("crypto"));
 var joi_1 = __importStar(require("joi"));
 var jose = __importStar(require("jose"));
-var UnprocessableEntityError_1 = __importDefault(require("../../errors/UnprocessableEntityError"));
+var ejs_1 = __importDefault(require("ejs"));
 var Auth_1 = __importDefault(require("../../models/Auth"));
 var PasswordReset_1 = __importDefault(require("../../models/PasswordReset"));
 var User_1 = __importDefault(require("../../models/User"));
 var mailer_1 = require("../../utils/mailer");
+var UnprocessableEntityError_1 = __importDefault(require("../../errors/UnprocessableEntityError"));
 var AccountController = /** @class */ (function () {
     function AccountController() {
     }
@@ -156,18 +157,19 @@ var AccountController = /** @class */ (function () {
     };
     AccountController.forgotPassword = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var validator, body, user_1, passwordReset, secretKey, jwt, hash, e_2;
+            var validator, body, user_1, passwordReset, secretKey, jwt, hash, _a, _b, e_2;
+            var _c;
             var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
-                        _a.trys.push([0, 7, , 8]);
+                        _d.trys.push([0, 8, , 9]);
                         validator = joi_1.default.object({
                             email: joi_1.default.string().email().required().trim(),
                         });
                         return [4 /*yield*/, validator.validateAsync(req.body)];
                     case 1:
-                        body = _a.sent();
+                        body = _d.sent();
                         return [4 /*yield*/, joi_1.default.object({
                                 email: joi_1.default.any().external(function (value) { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
@@ -193,17 +195,17 @@ var AccountController = /** @class */ (function () {
                                 },
                             })];
                     case 2:
-                        _a.sent();
+                        _d.sent();
                         return [4 /*yield*/, User_1.default.findOne({
                                 email: body.email,
                             }).exec()];
                     case 3:
-                        user_1 = _a.sent();
+                        user_1 = _d.sent();
                         return [4 /*yield*/, PasswordReset_1.default.create({
                                 user: user_1._id,
                             })];
                     case 4:
-                        passwordReset = _a.sent();
+                        passwordReset = _d.sent();
                         secretKey = crypto_1.default.createSecretKey(buffer_1.Buffer.from(process.env.JWT_SECRET, 'utf-8'));
                         return [4 /*yield*/, new jose.SignJWT({
                                 token: passwordReset.token,
@@ -212,20 +214,24 @@ var AccountController = /** @class */ (function () {
                                 .setExpirationTime('1h')
                                 .sign(secretKey)];
                     case 5:
-                        jwt = _a.sent();
+                        jwt = _d.sent();
                         hash = crypto_1.default.createHash('sha256').update(jwt).digest('hex');
                         return [4 /*yield*/, passwordReset.updateOne({
                                 hash: hash,
                             })];
                     case 6:
-                        _a.sent();
-                        mailer_1.transporter
-                            .sendMail({
+                        _d.sent();
+                        _b = (_a = mailer_1.transporter)
+                            .sendMail;
+                        _c = {
                             from: 'masga@carakan.id',
                             to: user_1.email,
-                            subject: 'Reset Password',
-                            html: jwt,
-                        })
+                            subject: 'Reset Password'
+                        };
+                        return [4 /*yield*/, ejs_1.default.renderFile(process.cwd() + '/src/resources/template/reset-password.ejs', { link: ejs_1.default.render(process.env.RESET_PASSWORD_URL, { token: jwt }) })];
+                    case 7:
+                        _b.apply(_a, [(_c.html = _d.sent(),
+                                _c)])
                             .catch(function (err) {
                             console.error("[Mailer] Cannot send password reset link email to ".concat(user_1.email, "."));
                         });
@@ -235,10 +241,10 @@ var AccountController = /** @class */ (function () {
                                     message: 'Password reset link email is sent.',
                                 },
                             })];
-                    case 7:
-                        e_2 = _a.sent();
+                    case 8:
+                        e_2 = _d.sent();
                         return [2 /*return*/, next(e_2)];
-                    case 8: return [2 /*return*/];
+                    case 9: return [2 /*return*/];
                 }
             });
         });
