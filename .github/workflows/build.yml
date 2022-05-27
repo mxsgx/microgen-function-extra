@@ -37,7 +37,7 @@ jobs:
           rm -rf ./build/dist
           rm -rf ./build/template
           rsync -av --recursive --delete ./main/dist ./build
-          rsync -av --recursive --delete ./mein/template ./build
+          rsync -av --recursive --delete ./main/template ./build
           cp -f ./main/package.json ./build/package.json
           cp -f ./main/package-lock.json ./build/package-lock.json
           echo $(date +%s) > ./build/timestamp.txt
