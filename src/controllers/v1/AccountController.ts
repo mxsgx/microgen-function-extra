@@ -164,7 +164,7 @@ export default class AccountController {
           to: user.email,
           subject: 'Reset Password',
           html: await ejs.renderFile(
-            process.cwd() + '/src/resources/template/reset-password.ejs',
+            __dirname + '/../../../template/email/reset-password.ejs',
             { link: ejs.render(process.env.RESET_PASSWORD_URL, { token: jwt }) }
           ),
         })
