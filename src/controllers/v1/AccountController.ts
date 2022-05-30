@@ -160,7 +160,7 @@ export default class AccountController {
 
       transporter
         .sendMail({
-          from: 'masga@carakan.id',
+          from: process.env.SMTP_USER,
           to: user.email,
           subject: 'Reset Password',
           html: await ejs.renderFile(
