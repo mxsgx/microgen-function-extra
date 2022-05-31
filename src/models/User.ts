@@ -11,6 +11,10 @@ export const UserSchema = new Schema<UserDocument>({
     default: '',
   },
   email: String,
+  emailVerifiedAt: {
+    type: Date,
+    required: false,
+  },
   password: {
     type: String,
     select: false,

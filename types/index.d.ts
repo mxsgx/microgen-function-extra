@@ -3,6 +3,7 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
+  emailVerifiedAt: number;
   password?: string;
 }
 

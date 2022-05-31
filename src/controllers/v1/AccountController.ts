@@ -13,6 +13,7 @@ import PasswordReset, {
 import User, { UserDocument } from '../../models/User';
 import { transporter } from '../../utils/mailer';
 import UnprocessableEntityError from '../../errors/UnprocessableEntityError';
+import UserEvent from '../../events/User';
 
 interface RegisterRequest {
   firstName: string;
@@ -76,6 +77,8 @@ export default class AccountController {
         email: body.email,
         password: await bcrypt.hashSync(body.password, 10),
       });
+
+      UserEvent.emit('registered', user);
 
       const auth = await Auth.create({
         user: user._id,
@@ -245,6 +248,55 @@ export default class AccountController {
         }
 
         return next(e);
+      }
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async requestVerification(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const user: UserDocument = await User.findById(req.auth?.user._id);
+
+      UserEvent.emit('registered', user);
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Verification link sent.',
+        },
+      });
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async verifyEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user: UserDocument = await User.findById(req.auth?.user._id);
+
+      if (!user.emailVerifiedAt) {
+        await user.updateOne({
+          emailVerifiedAt: Date.now(),
+        });
+
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Email verified!',
+          },
+        });
+      } else {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Email already verified.',
+          },
+        });
       }
     } catch (e) {
       return next(e);

@@ -20,6 +20,12 @@ const AccountRouter = Router();
 AccountRouter.post('/register', AccountController.register);
 AccountRouter.post('/forgot-password', AccountController.forgotPassword);
 AccountRouter.post('/reset-password', AccountController.resetPassword);
+AccountRouter.post(
+  '/request-verification',
+  auth,
+  AccountController.requestVerification
+);
+AccountRouter.post('/verify-email', auth, AccountController.verifyEmail);
 AccountRouter.get('/profile', auth, AccountController.getProfile);
 
 APIRouter.use('/account', AccountRouter);
