@@ -34,6 +34,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "ejs": "^3.1.8",
+    "express-signed-url": "^3.0.0",
     "joi": "^17.6.0",
     "jose": "^4.8.1",
     "mongo-url-parser": "^1.0.1",
