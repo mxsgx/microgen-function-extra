@@ -13,6 +13,10 @@ exports.UserSchema = new Schema({
         default: '',
     },
     email: String,
+    emailVerifiedAt: {
+        type: Date,
+        required: false,
+    },
     password: {
         type: String,
         select: false,

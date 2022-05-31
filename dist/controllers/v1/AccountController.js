@@ -73,6 +73,7 @@ var PasswordReset_1 = __importDefault(require("../../models/PasswordReset"));
 var User_1 = __importDefault(require("../../models/User"));
 var mailer_1 = require("../../utils/mailer");
 var UnprocessableEntityError_1 = __importDefault(require("../../errors/UnprocessableEntityError"));
+var User_2 = __importDefault(require("../../events/User"));
 var AccountController = /** @class */ (function () {
     function AccountController() {
     }
@@ -132,6 +133,7 @@ var AccountController = /** @class */ (function () {
                                 _c)])];
                     case 4:
                         user = _d.sent();
+                        User_2.default.emit('registered', user);
                         return [4 /*yield*/, Auth_1.default.create({
                                 user: user._id,
                                 expiresIn: Date.now() + 518400000,
@@ -224,7 +226,7 @@ var AccountController = /** @class */ (function () {
                         _b = (_a = mailer_1.transporter)
                             .sendMail;
                         _c = {
-                            from: 'masga@carakan.id',
+                            from: process.env.SMTP_USER,
                             to: user_1.email,
                             subject: 'Reset Password'
                         };
@@ -319,6 +321,70 @@ var AccountController = /** @class */ (function () {
                         e_4 = _e.sent();
                         return [2 /*return*/, next(e_4)];
                     case 11: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountController.requestVerification = function (req, res, next) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var user, e_5;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, User_1.default.findById((_a = req.auth) === null || _a === void 0 ? void 0 : _a.user._id)];
+                    case 1:
+                        user = _b.sent();
+                        User_2.default.emit('registered', user);
+                        return [2 /*return*/, res.status(200).json({
+                                status: 'success',
+                                data: {
+                                    message: 'Verification link sent.',
+                                },
+                            })];
+                    case 2:
+                        e_5 = _b.sent();
+                        return [2 /*return*/, next(e_5)];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountController.verifyEmail = function (req, res, next) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var user, e_6;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, User_1.default.findById((_a = req.auth) === null || _a === void 0 ? void 0 : _a.user._id)];
+                    case 1:
+                        user = _b.sent();
+                        if (!!user.emailVerifiedAt) return [3 /*break*/, 3];
+                        return [4 /*yield*/, user.updateOne({
+                                emailVerifiedAt: Date.now(),
+                            })];
+                    case 2:
+                        _b.sent();
+                        return [2 /*return*/, res.status(200).json({
+                                status: 'success',
+                                data: {
+                                    message: 'Email verified!',
+                                },
+                            })];
+                    case 3: return [2 /*return*/, res.status(200).json({
+                            status: 'success',
+                            data: {
+                                message: 'Email already verified.',
+                            },
+                        })];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        e_6 = _b.sent();
+                        return [2 /*return*/, next(e_6)];
+                    case 6: return [2 /*return*/];
                 }
             });
         });

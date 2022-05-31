@@ -18,6 +18,8 @@ var AccountRouter = (0, express_1.Router)();
 AccountRouter.post('/register', AccountController_1.default.register);
 AccountRouter.post('/forgot-password', AccountController_1.default.forgotPassword);
 AccountRouter.post('/reset-password', AccountController_1.default.resetPassword);
+AccountRouter.post('/request-verification', auth_1.default, AccountController_1.default.requestVerification);
+AccountRouter.post('/verify-email', auth_1.default, AccountController_1.default.verifyEmail);
 AccountRouter.get('/profile', auth_1.default, AccountController_1.default.getProfile);
 APIRouter.use('/account', AccountRouter);
 APIRouter.all('*', function (req, res, next) {
